@@ -60,6 +60,21 @@ const config: Config = {
     colorMode: {
       respectPrefersColorScheme: true,
     },
+    // Algolia DocSearch configuration
+    algolia: {
+      // The application ID provided by Algolia
+      appId: 'PH8HRF2VMO',
+      // Public API key: it is safe to commit it
+      apiKey: '7d36d2ab074cc3ce8a376ffc079c07af',
+      // The index name
+      indexName: 'cloud-vm-guide',
+      // Optional: see doc section below
+      contextualSearch: true,
+      // Optional: Algolia search parameters
+      searchParameters: {},
+      // Optional: path for search page that enabled by default (`false` to disable it)
+      searchPagePath: 'search',
+    },
     navbar: {
       title: 'BMLT Cloud VM Guide',
       logo: {
