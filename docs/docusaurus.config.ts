@@ -70,7 +70,7 @@ const config: Config = {
       // Public API key: it is safe to commit it
       apiKey: '14ed559458f59bb8bcc7ee29cbc0f71d',
       // The index name
-      indexName: 'cloud-vm-guide',
+      indexName: 'vmdocs_pjbuilds_dev_ph8hrf2vmo_pages',
       // Optional: see doc section below
       contextualSearch: true,
       // Optional: Algolia search parameters
