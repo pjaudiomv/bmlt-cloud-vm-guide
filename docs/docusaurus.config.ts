@@ -68,7 +68,7 @@ const config: Config = {
       // The application ID provided by Algolia
       appId: 'PH8HRF2VMO',
       // Public API key: it is safe to commit it
-      apiKey: '7d36d2ab074cc3ce8a376ffc079c07af',
+      apiKey: '14ed559458f59bb8bcc7ee29cbc0f71d',
       // The index name
       indexName: 'cloud-vm-guide',
       // Optional: see doc section below
