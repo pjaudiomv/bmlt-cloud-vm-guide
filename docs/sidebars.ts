@@ -45,6 +45,7 @@ const sidebars: SidebarsConfig = {
       label: 'Reference',
       items: [
         'reference/quick-commands',
+        'reference/configuration-files',
         'reference/faq',
       ],
     },
