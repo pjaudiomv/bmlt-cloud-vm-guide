@@ -60,6 +60,9 @@ const config: Config = {
     colorMode: {
       respectPrefersColorScheme: true,
     },
+    metadata: [
+      {name: 'algolia-site-verification', content: '56BFACB171992947'},
+    ],
     // Algolia DocSearch configuration
     algolia: {
       // The application ID provided by Algolia
