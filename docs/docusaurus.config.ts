@@ -65,7 +65,6 @@ const config: Config = {
     ],
     // Algolia DocSearch configuration
     algolia: {
-      container: '#docsearch',
       // The application ID provided by Algolia
       appId: 'ACADDE0UPN',
       // Public API key: it is safe to commit it
