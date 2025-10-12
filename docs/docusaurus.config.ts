@@ -61,7 +61,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     metadata: [
-      {name: 'algolia-site-verification', content: '56BFACB171992947'},
+      {name: 'algolia-site-verification', content: '1961DB32997E57B9'},
     ],
     // Algolia DocSearch configuration
     algolia: {
