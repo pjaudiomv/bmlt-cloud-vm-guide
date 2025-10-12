@@ -65,12 +65,13 @@ const config: Config = {
     ],
     // Algolia DocSearch configuration
     algolia: {
+      container: '#docsearch',
       // The application ID provided by Algolia
-      appId: 'PH8HRF2VMO',
+      appId: 'ACADDE0UPN',
       // Public API key: it is safe to commit it
-      apiKey: '14ed559458f59bb8bcc7ee29cbc0f71d',
+      apiKey: '2a9493d45ef9c0dc2822796ed776ecdf',
       // The index name
-      indexName: 'vmdocs_pjbuilds_dev_ph8hrf2vmo_pages',
+      indexName: 'BMLT VM Docs',
       // Optional: see doc section below
       contextualSearch: true,
       // Optional: Algolia search parameters
