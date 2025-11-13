@@ -139,8 +139,8 @@ const config: Config = {
               href: 'https://github.com/bmlt-enabled/yap',
             },
             {
-              label: 'BMLT Root Server',
-              href: 'https://github.com/bmlt-enabled/bmlt-root-server',
+              label: 'BMLT Server',
+              href: 'https://github.com/bmlt-enabled/bmlt-server',
             },
           ],
         },

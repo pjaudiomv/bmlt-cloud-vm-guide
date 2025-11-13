@@ -1,8 +1,8 @@
 # BMLT Installation
 
-This guide covers installing the BMLT Root Server on your configured LAMP stack.
+This guide covers installing the BMLT Server on your configured LAMP stack.
 
-## Download BMLT Root Server
+## Download BMLT Server
 
 ### Get Latest Release
 Download the latest stable version from GitHub:
@@ -12,14 +12,14 @@ Download the latest stable version from GitHub:
 cd /var/www/html
 # Or for domain setup: cd /var/www/your-domain.com
 
-# Download BMLT Root Server (current stable version)
-sudo wget https://github.com/bmlt-enabled/bmlt-root-server/releases/download/3.1.2/bmlt-root-server.zip
+# Download BMLT Server (current stable version)
+sudo wget https://github.com/bmlt-enabled/bmlt-server/releases/download/4.0.2/bmlt-server.zip
 
 # Extract the archive
-sudo unzip bmlt-root-server.zip
+sudo unzip bmlt-server.zip
 
 # Remove the zip file
-sudo rm bmlt-root-server.zip
+sudo rm bmlt-server.zip
 
 # Set proper ownership
 sudo chown -R www-data:www-data main_server
@@ -318,7 +318,7 @@ With BMLT successfully installed:
 
 - **User Manual**: [bmlt.app/documentation](https://bmlt.app/documentation/)
 - **Administrator Guide**: Available in BMLT admin panel
-- **GitHub Repository**: [github.com/bmlt-enabled/bmlt-root-server](https://github.com/bmlt-enabled/bmlt-root-server)
+- **GitHub Repository**: [github.com/bmlt-enabled/bmlt-server](https://github.com/bmlt-enabled/bmlt-server)
 - **Support Forums**: Community support available
 
 :::tip

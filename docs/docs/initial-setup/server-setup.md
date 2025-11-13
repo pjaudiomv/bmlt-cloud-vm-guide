@@ -365,7 +365,7 @@ sudo systemctl status apache2
 ## Next Steps
 
 With your LAMP stack configured, you can now proceed to:
-1. [BMLT Installation](bmlt-installation) - Install the BMLT Root Server
+1. [BMLT Installation](bmlt-installation) - Install the BMLT Server
 2. [YAP Installation](yap-installation) - Install YAP (if needed)
 3. [SSL Setup](ssl-setup) - Configure HTTPS certificates
 

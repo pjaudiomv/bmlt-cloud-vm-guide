@@ -223,7 +223,7 @@ sudo nano /var/www/your-domain.com/yap/config.php
 
 Update BMLT server URL:
 ```php
-// Update BMLT root server URL to use HTTPS
+// Update BMLT server URL to use HTTPS
 static $bmlt_root_server = "https://your-domain.com/main_server";
 ```
 

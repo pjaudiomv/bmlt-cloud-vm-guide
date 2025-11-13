@@ -66,7 +66,7 @@ This comprehensive guide covers:
 ## Prerequisites
 
 Before starting, you should have:
-- A cloud Ubuntu server (20.04 or 24.04 LTS recommended)
+- A cloud Ubuntu server (24.04 LTS recommended)
 - SSH access to your server
 - Basic familiarity with command line operations
 - A domain name (recommended for SSL)
@@ -75,7 +75,7 @@ Before starting, you should have:
 
 - **BMLT Project**: [bmlt.app](https://bmlt.app/)
 - **YAP Repository**: [github.com/bmlt-enabled/yap](https://github.com/bmlt-enabled/yap)
-- **BMLT Root Server**: [github.com/bmlt-enabled/bmlt-root-server](https://github.com/bmlt-enabled/bmlt-root-server)
+- **BMLT Server**: [github.com/bmlt-enabled/bmlt-server](https://github.com/bmlt-enabled/bmlt-server)
 
 ## Getting Started
 

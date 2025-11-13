@@ -17,7 +17,7 @@ YAP requires a Twilio account for phone services. You'll need Twilio credentials
 ## Prerequisites
 
 Before installing YAP, ensure you have:
-- BMLT Root Server installed and configured
+- BMLT Server installed and configured
 - MySQL database server running
 - Twilio account with phone number
 - YAP database and user created (from server setup)

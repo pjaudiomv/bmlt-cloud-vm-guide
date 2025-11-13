@@ -5,7 +5,7 @@ Before setting up your BMLT server, ensure you have the necessary resources and 
 ## Cloud Server Requirements
 
 ### Minimum System Specifications
-- **OS**: Ubuntu 20.04 LTS or 24.04 LTS (recommended)
+- **OS**: Ubuntu 24.04 LTS (recommended)
 - **RAM**: 2GB minimum, 4GB+ recommended for production
 - **CPU**: 2 vCPUs minimum
 - **Storage**: 50GB minimum, 100GB+ recommended

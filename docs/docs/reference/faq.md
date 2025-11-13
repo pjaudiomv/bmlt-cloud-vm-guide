@@ -32,7 +32,7 @@ You only need YAP if you want to provide telephone helpline services.
 **Q: What kind of server do I need to run BMLT?**
 
 A: Minimum requirements:
-- **OS**: Ubuntu 20.04 LTS or 24.04 LTS
+- **OS**: Ubuntu 24.04 LTS (recommended)
 - **RAM**: 2GB minimum, 4GB+ recommended
 - **CPU**: 2 vCPUs minimum  
 - **Storage**: 50GB minimum, 100GB+ recommended
@@ -269,11 +269,11 @@ A: Update process:
 1. **Backup first**: Database and files
 2. **Download new version**:
 ```bash
-wget https://github.com/bmlt-enabled/bmlt-root-server/releases/download/VERSION/bmlt-root-server.zip
+wget https://github.com/bmlt-enabled/bmlt-server/releases/download/VERSION/bmlt-server.zip
 ```
 3. **Extract and replace**:
 ```bash
-sudo unzip bmlt-root-server.zip
+sudo unzip bmlt-server.zip
 sudo mv main_server main_server_backup
 sudo mv extracted_main_server main_server
 sudo chown -R www-data:www-data main_server
