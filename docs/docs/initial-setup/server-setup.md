@@ -55,7 +55,7 @@ sudo apt install mysql-server mysql-client -y
 
 Install PHP and required extensions:
 ```bash
-sudo apt install php php-mysql php-curl php-gd php-zip php-mbstring php-xml libapache2-mod-php -y
+sudo apt install php php-mysql php-curl php-gd  php-intl php-zip php-mbstring php-xml libapache2-mod-php -y
 ```
 
 ### Additional Useful Packages
@@ -165,6 +165,14 @@ sudo iptables -I INPUT -p tcp -m tcp --dport 80 -j ACCEPT
 sudo iptables -I INPUT -p tcp -m tcp --dport 443 -j ACCEPT
 ```
 
+
+
+
+
+
+
+
+
 ## Secure MySQL Installation
 
 Run the MySQL security script to improve database security:
@@ -174,11 +182,22 @@ sudo mysql_secure_installation
 ```
 
 Follow these recommendations:
-1. **Set root password**: Choose a strong password
-2. **Remove anonymous users**: `Y`
-3. **Disallow root login remotely**: `Y`
-4. **Remove test database**: `Y`
-5. **Reload privilege tables**: `Y`
+1. **Password validation component**: `Y` (choose MEDIUM or STRONG policy)
+2. **Root password**: Modern MySQL uses `auth_socket` authentication by default, so no password is set. Root access requires `sudo mysql` instead (more secure)
+3. **Remove anonymous users**: `Y`
+4. **Disallow root login remotely**: `Y`
+5. **Remove test database**: `Y` (or `N` if needed for testing)
+6. **Reload privilege tables**: `Y`
+
+### Accessing MySQL as Root
+
+With `auth_socket` authentication (default), connect using:
+
+```bash
+sudo mysql
+```
+
+No password is required. This is more secure as it ties MySQL root access to system-level authentication.
 
 ## Create MySQL Databases and Users
 
@@ -236,7 +255,7 @@ php -m | grep -E "(mysql|curl|gd|zip|mbstring|xml)"
 Edit PHP configuration for better performance:
 
 ```bash
-sudo nano /etc/php/8.1/apache2/php.ini
+sudo nano /etc/php/8.3/apache2/php.ini
 ```
 
 Key settings to consider:
@@ -258,19 +277,12 @@ sudo systemctl restart apache2
 
 ## Set Up Web Directory Structure
 
-### Option 1: Using Default Document Root
-If using IP address only:
-```bash
-# Web files will be in /var/www/html/
-# BMLT will be accessible at: http://your-ip/main_server
-```
-
-### Option 2: Using Domain Name (Recommended)
+### Using Domain Name (Recommended)
 If you have a domain name:
 
 ```bash
 # Create directory for your domain
-sudo mkdir /var/www/your-domain.com
+sudo mkdir -p /var/www/your-domain.com
 
 # Set proper ownership
 sudo chown -R www-data:www-data /var/www/your-domain.com

@@ -9,8 +9,7 @@ Download the latest stable version from GitHub:
 
 ```bash
 # Navigate to web directory
-cd /var/www/html
-# Or for domain setup: cd /var/www/your-domain.com
+cd /var/www/your-domain.com
 
 # Download BMLT Server (current stable version)
 sudo wget https://github.com/bmlt-enabled/bmlt-server/releases/download/4.0.2/bmlt-server.zip
@@ -91,36 +90,27 @@ http://your-server-ip/main_server
 
 ### Installation Steps
 
-1. **Welcome Screen**
-   - Click "Continue" to start installation
+## Adding the auto-config File
 
-2. **Database Configuration**
-   - **Database Host**: `localhost`
-   - **Database Name**: `bmlt`
-   - **Database User**: `bmlt`
-   - **Database Password**: Enter the password you created earlier
-   - **Table Prefix**: Leave default (`bmlt_`) or customize
+Download the file `initial-auto-config.txt` from github at https://raw.githubusercontent.com/bmlt-enabled/bmlt-server/refs/heads/main/installation/initial-auto-config.txt.
 
-3. **Administrator Account**
-   - **Login ID**: Choose admin username
-   - **Password**: Create strong password
-   - **Confirm Password**: Re-enter password
-   - **Email Address**: Admin email address
-   - **Display Name**: Your name or organization
+Upload this file to your server, put it in the directory that holds your `main_server` directory, and rename it to `auto-config.inc.php`.  This file should have the permissions `-rw-r--r--` (`0644` in octal). This means that the owner of the file can read and write it, and the owning group and others can read it.
 
-4. **Service Body Setup**
-   - **Service Body Name**: Your area/region name
-   - **Description**: Brief description of your service body
-   - **Service Body Type**: Usually "Area" or "Region"
-   - **Contact Email**: Service body contact email
+Note that the file `auto-config.inc.php` is not inside `main_server`, but rather at the same level. This is a little weird, but does have the advantage that you can upload a new version of the server easily without touching the `auto-config.inc.php` file.  So your directory structure should look something like this:
+```
+public_html
+   auto-config.inc.php
+   main_server
+      app
+      bootstrap
+      ......
+```
 
-5. **Meeting Data**
-   - Choose to import sample data or start fresh
-   - Sample data helps understand the system
+Now edit the `auto-config.inc.php` file with new parameters as needed. You can do this using the `edit` command on cPanel. There are two parameters you definitely need to update, namely `$dbUser` and `$dbPassword` (the user and password for your server database). You also need to either update the parameter `$gkey` if you are using Google Maps, or else delete this parameter altogether if you are using OSM (Open Street Maps) for maps and nominatim for geocoding.
 
-6. **Complete Installation**
-   - Review settings and click "Install"
-   - Installation may take a few minutes
+There are various other parameters in the file, but the default values may well be what you want.
+
+Alternatively, you can edit the `initial-auto-config.txt` file on your local machine, and then upload the edited file, thus avoiding needing to edit it on your web host. If you do that, be sure and use an editor intended for editing source code and not something like Microsoft Word.
 
 ## Post-Installation Configuration
 
@@ -130,10 +120,6 @@ After successful installation:
 ```bash
 # Navigate to BMLT directory
 cd /var/www/your-domain.com/main_server
-# Or: cd /var/www/html/main_server
-
-# Remove installation directory
-sudo rm -rf install/
 ```
 
 ### Set File Permissions
