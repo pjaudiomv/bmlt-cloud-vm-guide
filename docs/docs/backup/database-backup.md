@@ -76,47 +76,6 @@ sudo mysqldump --all-databases | gzip > all-databases-backup-$(date +%Y%m%d).gz
 sudo mysqldump --all-databases --routines --triggers --events --single-transaction | gzip > complete-mysql-backup-$(date +%Y%m%d).gz
 ```
 
-## Advanced Backup Options
-
-### Backup with Additional Metadata
-
-```bash
-# Include all database objects
-sudo mysqldump \
-  --routines \
-  --triggers \
-  --events \
-  --single-transaction \
-  --master-data=2 \
-  --flush-logs \
-  bmlt | gzip > bmlt-complete-$(date +%Y%m%d).gz
-```
-
-**Options explained:**
-- `--routines`: Include stored procedures and functions
-- `--triggers`: Include triggers
-- `--events`: Include event scheduler events
-- `--single-transaction`: Consistent backup for InnoDB tables
-- `--master-data=2`: Include binary log position (commented)
-- `--flush-logs`: Flush logs before backup
-
-### Backup Specific Tables
-
-```bash
-# Backup only meeting data
-sudo mysqldump bmlt bmlt_comdef_meetings bmlt_comdef_meetings_data | gzip > meetings-only-$(date +%Y%m%d).gz
-
-# Backup user data only
-sudo mysqldump bmlt bmlt_comdef_users | gzip > users-only-$(date +%Y%m%d).gz
-```
-
-### Exclude Certain Tables
-
-```bash
-# Backup excluding log tables
-sudo mysqldump bmlt --ignore-table=bmlt.bmlt_comdef_changes | gzip > bmlt-no-logs-$(date +%Y%m%d).gz
-```
-
 ## Automated Backup Scripts
 
 ### Basic Backup Script
@@ -200,108 +159,6 @@ Make the script executable:
 
 ```bash
 sudo chmod +x /usr/local/bin/backup-bmlt.sh
-```
-
-### Advanced Backup Script with Email Notifications
-
-```bash
-sudo nano /usr/local/bin/backup-bmlt-advanced.sh
-```
-
-```bash
-#!/bin/bash
-# Advanced BMLT Backup Script with Email Notifications
-
-# Configuration
-BACKUP_DIR="/var/backups/bmlt"
-RETENTION_DAYS=30
-DATE=$(date +%Y%m%d_%H%M%S)
-LOG_FILE="/var/log/bmlt-backup.log"
-EMAIL="admin@your-domain.com"
-SERVER_NAME=$(hostname)
-
-# Error handling
-set -e
-trap 'handle_error $? $LINENO' ERR
-
-handle_error() {
-    local exit_code=$1
-    local line_number=$2
-    log_message "ERROR: Script failed at line $line_number with exit code $exit_code"
-    send_notification "FAILED" "Backup failed at line $line_number"
-    exit $exit_code
-}
-
-# Logging function
-log_message() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a $LOG_FILE
-}
-
-# Email notification function
-send_notification() {
-    local status=$1
-    local message=$2
-    local subject="BMLT Backup $status - $SERVER_NAME"
-    
-    echo "$message" | mail -s "$subject" "$EMAIL" 2>/dev/null || true
-}
-
-# Verify database connectivity
-verify_database() {
-    local db_name=$1
-    if ! mysql -e "SELECT 1;" "$db_name" >/dev/null 2>&1; then
-        log_message "ERROR: Cannot connect to $db_name database"
-        return 1
-    fi
-}
-
-# Create backup directory with proper permissions
-mkdir -p "$BACKUP_DIR"
-chmod 700 "$BACKUP_DIR"
-
-log_message "Starting advanced BMLT backup process"
-
-# Verify database connections
-verify_database "bmlt"
-verify_database "yap"
-
-# Create backups
-for db in bmlt yap; do
-    backup_file="$BACKUP_DIR/${db}-backup-${DATE}.gz"
-    log_message "Backing up $db database"
-    
-    mysqldump \
-        --single-transaction \
-        --routines \
-        --triggers \
-        --events \
-        --set-gtid-purged=OFF \
-        "$db" | gzip > "$backup_file"
-    
-    chmod 600 "$backup_file"
-    log_message "Backup completed: $backup_file ($(du -h "$backup_file" | cut -f1))"
-done
-
-# Test backup integrity
-log_message "Testing backup integrity"
-for backup_file in "$BACKUP_DIR"/*-backup-${DATE}.gz; do
-    if ! gzip -t "$backup_file"; then
-        log_message "ERROR: Backup file $backup_file is corrupted"
-        send_notification "FAILED" "Backup file $backup_file is corrupted"
-        exit 1
-    fi
-done
-
-# Cleanup old backups
-find "$BACKUP_DIR" -name "*-backup-*.gz" -mtime +$RETENTION_DAYS -delete
-find "$BACKUP_DIR" -name "config-backup-*.tar.gz" -mtime +$RETENTION_DAYS -delete
-
-# Generate backup report
-backup_count=$(find "$BACKUP_DIR" -name "*-backup-*.gz" -mtime -1 | wc -l)
-total_size=$(du -sh "$BACKUP_DIR" | cut -f1)
-
-log_message "Backup completed successfully. Files: $backup_count, Total size: $total_size"
-send_notification "SUCCESS" "Backup completed. Files: $backup_count, Size: $total_size"
 ```
 
 ## Automated Backup Scheduling
@@ -516,46 +373,6 @@ for backup_file in $(find "$BACKUP_DIR" -name "*.gz" -mtime -7); do
     verify_backup "$backup_file"
 done
 log_message "Backup verification completed"
-```
-
-## Monitoring and Alerting
-
-### Backup Monitoring Script
-
-```bash
-sudo nano /usr/local/bin/monitor-backups.sh
-```
-
-```bash
-#!/bin/bash
-# Backup Monitoring Script
-
-BACKUP_DIR="/var/backups/bmlt"
-EMAIL="admin@your-domain.com"
-MAX_AGE_HOURS=25  # Alert if newest backup is older than 25 hours
-
-# Find newest backup
-NEWEST_BACKUP=$(find "$BACKUP_DIR" -name "*-backup-*.gz" -type f -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)
-
-if [ -z "$NEWEST_BACKUP" ]; then
-    echo "ERROR: No backups found in $BACKUP_DIR" | mail -s "BMLT Backup Alert: No backups found" "$EMAIL"
-    exit 1
-fi
-
-# Check backup age
-BACKUP_AGE=$(find "$NEWEST_BACKUP" -mmin +$((MAX_AGE_HOURS * 60)) 2>/dev/null)
-
-if [ -n "$BACKUP_AGE" ]; then
-    BACKUP_TIME=$(stat -c %y "$NEWEST_BACKUP")
-    echo "WARNING: Newest backup is older than $MAX_AGE_HOURS hours. Last backup: $BACKUP_TIME" | \
-        mail -s "BMLT Backup Alert: Stale backups" "$EMAIL"
-fi
-```
-
-Add to crontab for hourly checks:
-
-```bash
-echo "0 * * * * /usr/local/bin/monitor-backups.sh" | sudo crontab -
 ```
 
 ## Backup Storage Strategies
