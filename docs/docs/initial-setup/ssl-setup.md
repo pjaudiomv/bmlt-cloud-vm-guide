@@ -267,18 +267,6 @@ sudo systemctl is-enabled certbot.timer
 sudo systemctl enable certbot.timer
 ```
 
-### Manual Renewal Setup (if needed)
-
-If automatic renewal isn't working, set up a cron job:
-
-```bash
-# Edit crontab
-sudo crontab -e
-
-# Add renewal command (runs twice daily)
-0 12 * * * /usr/bin/certbot renew --quiet --post-hook "systemctl reload apache2"
-```
-
 ### Check Renewal History
 
 ```bash
@@ -287,43 +275,6 @@ sudo grep renew /var/log/letsencrypt/letsencrypt.log
 
 # Check certificate validity
 sudo certbot certificates
-```
-
-## Security Hardening
-
-### SSL/TLS Configuration
-
-Create enhanced SSL configuration:
-
-```bash
-sudo nano /etc/letsencrypt/options-ssl-apache.conf
-```
-
-Add enhanced security settings:
-```apache
-# Enhanced SSL Configuration
-SSLEngine on
-SSLProtocol -all +TLSv1.2 +TLSv1.3
-SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256
-SSLHonorCipherOrder on
-SSLCompression off
-SSLUseStapling on
-SSLStaplingCache "shmcb:logs/stapling-cache(150000)"
-```
-
-### Security Headers
-
-Add comprehensive security headers to your SSL virtual host:
-
-```apache
-# Security Headers
-Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-Header always set X-Content-Type-Options nosniff
-Header always set X-Frame-Options DENY
-Header always set X-XSS-Protection "1; mode=block"
-Header always set Referrer-Policy "strict-origin-when-cross-origin"
-Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'"
-Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 ```
 
 ## Troubleshooting SSL Issues
@@ -337,14 +288,6 @@ ls -la /etc/letsencrypt/live/your-domain.com/
 
 # Check Apache error log
 sudo tail -f /var/log/apache2/error.log
-```
-
-**Mixed content warnings:**
-```bash
-# Check for HTTP resources on HTTPS pages
-grep -r "http://" /var/www/your-domain.com/
-
-# Update any hardcoded HTTP URLs to HTTPS
 ```
 
 **Certificate validation failed:**
@@ -382,121 +325,12 @@ sudo certbot renew
 sudo systemctl start apache2
 ```
 
-## Performance Optimization
-
-### Enable HTTP/2
-
-HTTP/2 improves performance over HTTPS:
-
-```bash
-# Enable HTTP/2 module
-sudo a2enmod http2
-
-# Add to SSL virtual host
-echo "Protocols h2 http/1.1" | sudo tee -a /etc/apache2/sites-available/your-domain.com-le-ssl.conf
-
-# Restart Apache
-sudo systemctl restart apache2
-```
-
-### SSL Session Caching
-
-Improve SSL performance with session caching:
-
-```apache
-# Add to SSL configuration
-SSLSessionCache        "shmcb:${APACHE_RUN_DIR}/ssl_scache(512000)"
-SSLSessionCacheTimeout  300
-```
-
-## Monitoring SSL Health
-
-### Certificate Expiration Monitoring
-
-Set up monitoring for certificate expiration:
-
-```bash
-# Create monitoring script
-sudo nano /usr/local/bin/check-ssl.sh
-```
-
-```bash
-#!/bin/bash
-# Check SSL certificate expiration
-DOMAIN="your-domain.com"
-EXPIRY=$(echo | openssl s_client -servername $DOMAIN -connect $DOMAIN:443 2>/dev/null | openssl x509 -noout -dates | grep notAfter | cut -d= -f2)
-EXPIRY_EPOCH=$(date -d "$EXPIRY" +%s)
-CURRENT_EPOCH=$(date +%s)
-DAYS_UNTIL_EXPIRY=$(( ($EXPIRY_EPOCH - $CURRENT_EPOCH) / 86400 ))
-
-if [ $DAYS_UNTIL_EXPIRY -lt 30 ]; then
-    echo "WARNING: SSL certificate for $DOMAIN expires in $DAYS_UNTIL_EXPIRY days"
-    # Add notification logic here (email, etc.)
-fi
-```
-
-```bash
-# Make executable
-sudo chmod +x /usr/local/bin/check-ssl.sh
-
-# Add to crontab for daily checks
-echo "0 9 * * * /usr/local/bin/check-ssl.sh" | sudo crontab -
-```
-
-### SSL Configuration Testing
-
-Regular testing script:
-
-```bash
-# Create SSL test script
-sudo nano /usr/local/bin/test-ssl.sh
-```
-
-```bash
-#!/bin/bash
-DOMAIN="your-domain.com"
-
-# Test HTTPS connection
-if curl -s -I https://$DOMAIN | grep -q "HTTP/.*200"; then
-    echo "HTTPS connection: OK"
-else
-    echo "HTTPS connection: FAILED"
-fi
-
-# Test HTTP redirect
-if curl -s -I http://$DOMAIN | grep -q "301\|302"; then
-    echo "HTTP redirect: OK"
-else
-    echo "HTTP redirect: FAILED"
-fi
-
-# Test certificate validity
-if openssl s_client -connect $DOMAIN:443 -servername $DOMAIN </dev/null 2>/dev/null | openssl x509 -noout -checkend 2592000; then
-    echo "Certificate validity: OK (valid for 30+ days)"
-else
-    echo "Certificate validity: WARNING (expires within 30 days)"
-fi
-```
-
-## Backup SSL Configuration
-
-```bash
-# Backup Let's Encrypt configuration
-sudo tar -czf ~/letsencrypt-backup-$(date +%Y%m%d).tar.gz /etc/letsencrypt/
-
-# Backup Apache SSL configuration
-sudo cp /etc/apache2/sites-available/your-domain.com-le-ssl.conf ~/ssl-vhost-backup.conf
-```
-
 ## Next Steps
 
 With SSL configured:
 
 1. **Update all links** to use HTTPS
 2. **Test thoroughly** - verify all functionality works over HTTPS
-3. **Monitor certificate** - set up expiration alerts
-4. **Security scan** - run security assessment tools
-5. **Performance test** - verify HTTPS performance is acceptable
 
 ## SSL Resources
 
@@ -506,9 +340,5 @@ With SSL configured:
 - **Certificate Transparency**: [crt.sh](https://crt.sh/)
 
 :::tip Best Practice
-Always test your SSL configuration after setup and after any changes. Use both automated tools and manual testing to ensure everything works correctly.
-:::
-
-:::warning Certificate Backup
-While Let's Encrypt certificates can be re-issued, backing up your certificate configuration helps with disaster recovery and server migrations.
+Always test your SSL configuration after setup and after any changes. Test to ensure everything works correctly.
 :::

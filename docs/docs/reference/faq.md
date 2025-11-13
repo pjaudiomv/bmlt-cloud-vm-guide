@@ -381,7 +381,6 @@ A: Support resources:
 - **GitHub Issues**: Report bugs and request features
 - **Community Forums**: Ask questions and share experiences
 - **This Guide**: Comprehensive server management help
-- **Professional Support**: Consider hiring a consultant for complex issues
 
 ## Migration Questions
 
@@ -406,9 +405,9 @@ A: Migration process:
 A: Domain change process:
 1. **Update DNS**: Point new domain to server
 2. **Request new SSL certificate**:
-```bash
-sudo certbot --apache -d new-domain.com
-```
+    ```bash
+    sudo certbot --apache -d new-domain.com
+    ```
 3. **Update BMLT configuration**: Change URLs in admin panel
 4. **Update YAP configuration**: Update BMLT server URL
 5. **Test all integrations**: Verify everything works
@@ -419,37 +418,11 @@ sudo certbot --apache -d new-domain.com
 
 A: This is complex and requires:
 - Database expertise to merge data
-- Careful handling of ID conflicts
-- Service body restructuring
-- User account consolidation
+- Careful handling of conflicts
+- See [Lettuce](https://github.com/bmlt-enabled/lettuce) a tool for merging servers
 
-Consider professional assistance for large merges.
+Consider professional assistance.
 
-## Legal and Compliance
-
-### Do I need to worry about GDPR?
-
-**Q: What about data privacy regulations?**
-
-A: Consider privacy requirements:
-- **Personal data**: Meeting contact information
-- **User accounts**: Admin and user data
-- **Backups**: Secure storage and retention policies
-- **Access logs**: Monitor who accesses data
-
-Consult legal counsel for specific compliance requirements.
-
-### Who owns the data?
-
-**Q: Who owns the meeting data in BMLT?**
-
-A: Typically, the service body (area/region) owns the data. Clarify:
-- Data ownership policies
-- Access rights and responsibilities  
-- Backup and disaster recovery obligations
-- Data sharing agreements
-
-Document these agreements clearly.
 
 ---
 

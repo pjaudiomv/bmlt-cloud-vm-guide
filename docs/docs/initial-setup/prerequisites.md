@@ -8,7 +8,7 @@ Before setting up your BMLT server, ensure you have the necessary resources and 
 - **OS**: Ubuntu 24.04 LTS (recommended)
 - **RAM**: 2GB minimum, 4GB+ recommended for production
 - **CPU**: 2 vCPUs minimum
-- **Storage**: 50GB minimum, 100GB+ recommended
+- **Storage**: 30GB minimum, 100GB recommended
 - **Network**: Public IP address
 
 ### Supported Cloud Providers
@@ -24,12 +24,12 @@ This guide works with any Ubuntu cloud server, including:
 
 ### SSH Access
 You'll need SSH access to your server:
-- SSH key pair (recommended) or password
+- SSH key pair (*[Guide for Generating SSH Key pair](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)*)
 - Terminal application (Terminal on macOS/Linux, PuTTY on Windows)
 - Basic command line familiarity
 
-### Domain Name (Recommended)
-While not strictly required, a domain name is highly recommended for:
+### Domain Name
+A domain name is required for:
 - SSL certificate installation
 - Professional appearance
 - Email functionality (if using YAP)
@@ -38,6 +38,9 @@ While not strictly required, a domain name is highly recommended for:
 - [ ] Domain purchased and accessible
 - [ ] DNS A record pointing to server IP
 - [ ] DNS propagation completed (can take 24-48 hours)
+
+**Recommended Providers**
+- [Namecheap](https://www.namecheap.com)
 
 ## Required Information
 
@@ -50,7 +53,6 @@ Before starting, gather the following information:
 
 ### Domain Configuration (if applicable)
 - **Domain Name**: `your-domain.com`
-- **Email Address**: For SSL certificate notifications
 
 ### Service Configuration
 - **BMLT Admin Email**: For BMLT administrator account
@@ -80,7 +82,6 @@ For editing configuration files locally:
 
 ### SSH Key Best Practices
 - Use RSA 4096-bit or Ed25519 keys
-- Protect private keys with passphrases
 - Never share private keys
 - Use different keys for different servers
 

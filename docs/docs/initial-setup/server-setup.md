@@ -247,10 +247,6 @@ memory_limit = 256M
 # Increase maximum execution time
 max_execution_time = 300
 
-# Increase upload limits (for BMLT imports)
-upload_max_filesize = 64M
-post_max_size = 64M
-
 # Set timezone (replace with your timezone)
 date.timezone = America/New_York
 ```
